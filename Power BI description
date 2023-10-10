@@ -1,0 +1,9 @@
+Basket Analysis Chart visualization to Power BI:
+
+In basket analysis network chart the size of bubble depend on lift value:
+the Basket Analysis Chart is a traditional Scatter chart.
+There is one thing to be careful about: when a product has connections with multiple products, the number shown is the sum of the support for the various connections. This number is meaningless. Even if the number itself is meaningless, a bigger number means that the product has important Lift (relationships) with other products therefore the product deserves further analysis.
+Basket Analysis map
+you can watch the relation between lift and support in basket, If you hold mouse on bubble you can see the confidence as well as lift and support
+this chart help you can now analyze your product salesfind cross-selling opportunities!
+At the top of dashboard there is two filter you can select apply filter in the other chart to analyze specific basket in dashboard.
