@@ -1,0 +1,12 @@
+I am trying to retrieve data from an SQL server using pyodbc 
+First we import the pyodbc module, then create a connection to the database
+
+import pyodbc 
+cnxn = pyodbc.connect(
+    'Driver={SQL Server};'
+    'Server=myserver IP;'
+    'Database=database name;'
+    'UID=s.rasti;'
+    'PWD=*****;'
+    'Trusted_Connection=yes;',
+     autcommit=True)
