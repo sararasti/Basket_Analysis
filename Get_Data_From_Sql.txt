@@ -1,0 +1,44 @@
+I am trying to retrieve data from an SQL server using pyodbc 
+First we import the pyodbc module, then create a connection to the database
+
+import pyodbc 
+cnxn = pyodbc.connect(
+    'Driver={SQL Server};'
+    'Server=myserver IP;'
+    'Database=database name;'
+    'UID=s.rasti;'
+    'PWD=*****;'
+    'Trusted_Connection=yes;',
+     autcommit=True)
+
+# SQL query to retrieve data
+query = '''
+SELECT 
+    s.OrderId,
+    SUM(QtyFinal),
+    SUM(QtyFinal * PriceInclTax) SaleAmount,
+    COUNT(OrderId) CountOrder,
+    d.AttributeSetName,
+    d.AttributeSetId,
+    d.CategoryName_Level2,
+    ProductMiddleCategory,
+    ProductName,
+    d.ProductCode,
+    s.CouponCode
+FROM Sale.FactSale s
+JOIN Sale.DimCustomer dc ON s.CustomerCode = dc.CustomerCode
+JOIN Marketing.DimCoupon c ON c.CouponCode = s.CouponCode
+JOIN Inventory.DimProduct d ON d.ProductCode = s.ProductCode
+WHERE 
+    s.DateKey >= 14020201
+    AND s.OrderStatusCode NOT IN ('canceled', 'closed', 'return_after_shipment', 'not_delivered', 'waiting_for_reception')
+    AND s.CustomerCode NOT IN (9026577, 9168017) AND CustomerGroupCode NOT IN (8, 9, 4)
+    AND s.OrderId IN (SELECT OrderId
+                     FROM Sale.FactSale n
+                     GROUP BY OrderId
+                     HAVING COUNT(n.OrderId) > 1)
+GROUP BY s.CustomerCode, ProductSubCategory, ProductMiddleCategory, ProductName, s.CouponCode, s.OrderId, d.AttributeSetName, d.CategoryName_Level2, d.AttributeSetId, d.ProductCode
+'''
+
+# Read data from SQL Server
+Sale_Product= pd.read_sql(query, cnxn)
